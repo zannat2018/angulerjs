@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>AngularJS CRUD Application</title>
+	<script src="angular.min.js"></script>
+	<script src="jquery-3.2.1.min.js"></script>
+	
+</head>
+<body>
+	<div ng-app="mainApp" ng-controller="CRUDController">
+		<table>
+			
+			<td>Name</td>
+			<td><input type="text" ng-model="Name"></td>	
+			</tr>
+			<tr>
+			<td>Salary</td>
+			<td><input type="number" ng-model="Salary"></td>	
+			</tr>
+			<tr>
+				<td><input type="button" ng-click="AddData()" value="Save Data"></td>
+				<td><input type="button" ng-click="UpdateData()" value="Update Data"></td>
+			</tr>
+		</table>
+<hr>
+		<table border="1" style="width:500px;">
+			<thead>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Salary</th>
+				<th>Action</th>
+			</thead>
+			<tr ng-click="BindSelectedData(Emp)" ng-repeat="Emp in EmpList">
+				<td>{{Emp.Id}}</td>
+				<td>{{Emp.Name}}</td>
+				<td>{{Emp.Salary}}</td>
+				<td><input style="text-align:center;" type="button" value="Delete" ng-click="DeleteData(EMP)"></td>
+
+			</tr>
+
+		</table>
+	</div>
+    <script>
+    var app = angular.module("mainApp", []);
+
+app.controller("CRUDController", function($scope){
+
+	$scope.EmpList = [];
+	
+	$scope.AddData = function(){
+		var emp = {
+			Id:$scope.EmpList.length + 1,
+			Name:$scope.Name,
+			Salary:$scope.Salary
+		};
+
+		$scope.EmpList.push(emp);
+		ClearModel();
+	};
+
+	$scope.DeleteData = function(emp){
+		var index = $scope.EmpList.indexOf(emp);
+		$scope.EmpList.splice(index,1);
+	}
+
+	$scope.BindSelectedData = function(emp){
+		$scope.Id=emp.Id;
+		$scope.Name=emp.Name;
+		$scope.Salary=emp.Salary;
+	};
+
+	$scope.UpdateData = function(){
+		$.grep($scope.EmpList, function(e){
+			if(e.Id == $scope.Id)
+			{
+				e.Name = $scope.Name;
+				e.Salary = $scope.Salary;
+			}
+		});
+
+	};
+
+	function ClearModel(){
+		$scope.ID = '';
+		$scope.Name='';
+		$scope.Salary='';
+	};
+});
+
+    </script>
+	
+</body>
+</html>
